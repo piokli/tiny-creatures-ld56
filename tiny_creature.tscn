@@ -1,21 +1,30 @@
-[gd_scene load_steps=4 format=3 uid="uid://dewxdok5mi5wa"]
+[gd_scene load_steps=5 format=3 uid="uid://dewxdok5mi5wa"]
 
 [ext_resource type="Script" path="res://tiny_creature.gd" id="1_yvi2v"]
 [ext_resource type="PackedScene" uid="uid://buf4rweh5at1v" path="res://visual_vector_2d.tscn" id="2_lkngm"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_v42o3"]
+radius = 12.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ekuq0"]
+size = Vector2(22, 22)
 
 [node name="TinyCreature" type="CharacterBody2D"]
+motion_mode = 1
 script = ExtResource("1_yvi2v")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_v42o3")
 
-[node name="velocity" parent="." node_paths=PackedStringArray("vehicle_node") instance=ExtResource("2_lkngm")]
+[node name="VelocityVec" parent="." node_paths=PackedStringArray("vehicle_node") instance=ExtResource("2_lkngm")]
 vehicle_node = NodePath("..")
 
-[node name="velocity2" parent="." node_paths=PackedStringArray("vehicle_node") instance=ExtResource("2_lkngm")]
+[node name="OrientationVec" parent="." node_paths=PackedStringArray("vehicle_node") instance=ExtResource("2_lkngm")]
 vehicle_node = NodePath("..")
 vector_to_draw = "_orientation"
 vec_scale = 10.0
 vec_color = Color(0.743008, 0.369147, 0.761587, 1)
+
+[node name="ObstacleAvoidance" type="ShapeCast2D" parent="."]
+shape = SubResource("RectangleShape2D_ekuq0")
+target_position = Vector2(0, 100)

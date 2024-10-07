@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://bapu4w4xwd061"]
+
+[ext_resource type="Script" path="res://movable_obstacle.gd" id="1_5m1mq"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lw3lf"]
+radius = 20.0
+
+[node name="MovableObstacle" type="RigidBody2D"]
+gravity_scale = 0.0
+script = ExtResource("1_5m1mq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_lw3lf")
