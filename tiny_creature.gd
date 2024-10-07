@@ -11,7 +11,7 @@ var _velocity : Vector2 = Vector2.ZERO
 var _orientation : Vector2 = Vector2.DOWN
 # and position, velocity, orientation
 
-var obstacle_avoidance_enabled := false
+var obstacle_avoidance_enabled := true
 var push_force : float = 10.0
 
 
@@ -24,15 +24,35 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	var target := get_global_mouse_position()
-	velocity = SteerigBehaviors.arrive(
-			velocity,
-			position,
-			target,
-			delta,
-			mass,
-			max_speed,
-			max_force,
-	)
+	
+	if obstacle_avoidance_enabled and $ObstacleAvoidance.is_colliding():
+		var obstacle_pos = $ObstacleAvoidance.get_collision_point(0) # TODO: get the neartest
+		var dir_vec := velocity.normalized()
+		var dir_to_collision_point := Vector2(obstacle_pos - position).normalized()
+		var opposite_of_nearest_obstacle = \
+				dir_to_collision_point.reflect(dir_vec) - \
+				dir_to_collision_point.project(dir_vec)
+		
+		velocity = SteerigBehaviors.seek(
+				velocity,
+				position,
+				position + opposite_of_nearest_obstacle,
+				delta,
+				mass,
+				max_speed,
+				max_force,
+		)
+	else:
+		velocity = SteerigBehaviors.arrive(
+				velocity,
+				position,
+				target,
+				delta,
+				mass,
+				max_speed,
+				max_force,
+		)
+	
 	move_and_slide()
 	_orientation = velocity.normalized()
 	rotation = Vector2.DOWN.angle_to(_orientation)

@@ -7,9 +7,10 @@
 radius = 12.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ekuq0"]
-size = Vector2(22, 22)
+size = Vector2(30, 22)
 
 [node name="TinyCreature" type="CharacterBody2D"]
+collision_mask = 3
 motion_mode = 1
 script = ExtResource("1_yvi2v")
 
@@ -28,3 +29,6 @@ vec_color = Color(0.743008, 0.369147, 0.761587, 1)
 [node name="ObstacleAvoidance" type="ShapeCast2D" parent="."]
 shape = SubResource("RectangleShape2D_ekuq0")
 target_position = Vector2(0, 100)
+margin = 3.0
+max_results = 16
+collision_mask = 2
