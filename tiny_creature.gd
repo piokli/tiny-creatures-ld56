@@ -4,6 +4,7 @@ extends CharacterBody2D
 @export var mass : float = 0.1
 @export var max_force : float = 500.0
 @export var max_speed : float = 500.0
+@export var target_node : Node = null
 
 var steering_force : Vector2 = Vector2.ZERO
 var _position : Vector2 = Vector2.ZERO
@@ -11,8 +12,8 @@ var _velocity : Vector2 = Vector2.ZERO
 var _orientation : Vector2 = Vector2.DOWN
 # and position, velocity, orientation
 
-var obstacle_avoidance_enabled := true
-var push_force : float = 10.0
+var obstacle_avoidance_enabled := false
+var push_force : float = 100.0
 
 
 func _ready() -> void:
@@ -23,7 +24,11 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	var target := get_global_mouse_position()
+	var target := Vector2.ZERO
+	if target_node != null:
+		target = target_node.position
+	else:
+		target = get_global_mouse_position()
 	
 	if obstacle_avoidance_enabled and $ObstacleAvoidance.is_colliding():
 		var obstacle_pos = $ObstacleAvoidance.get_collision_point(0) # TODO: get the neartest
@@ -64,6 +69,8 @@ func _process(delta: float) -> void:
 			c.get_collider().apply_central_impulse(-c.get_normal() * push_force)
 	
 	$ObstacleAvoidance.enabled = obstacle_avoidance_enabled
+	$ObstacleAvoidance.target_position = \
+		$ObstacleAvoidance.target_position.normalized() * velocity.length() * 0.1
 
 
 func _draw():
